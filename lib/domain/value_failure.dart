@@ -6,3 +6,6 @@ part 'value_failure.freezed.dart';
 abstract class ValueFailure with _$ValueFailure {
   const factory ValueFailure({@required String errorMsg}) = _ValueFailure;
 }
+abstract class NoteFailure with _$NoteFailure {
+  const factory NoteFailure({@required String errorMsg}) = _NoteFailure;
+}
