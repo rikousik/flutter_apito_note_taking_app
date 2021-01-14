@@ -50,7 +50,7 @@ class HomeBody extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  state.noteList.notes[index].title,
+                                  state.noteList.notes[index].data.title,
                                   style: _theme.textTheme.headline5,
                                 ),
                                 Text(
@@ -65,7 +65,7 @@ class HomeBody extends StatelessWidget {
                               height: 5,
                             ),
                             Text(
-                              state.noteList.notes[index].note,
+                              state.noteList.notes[index].data.note,
                               overflow: TextOverflow.ellipsis,
                               style: _theme.textTheme.bodyText1,
                               maxLines: 3,

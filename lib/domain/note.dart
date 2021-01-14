@@ -5,10 +5,13 @@ part 'note.g.dart';
 
 @freezed
 abstract class Note with _$Note {
-  const factory Note(
+  const factory Note({@required NoteData data, @required String id}) = NoteObj;
+
+  const factory Note.data(
       {@required String title,
       @required String note,
-      @required int timeStamp}) = NoteObj;
+      @required int timestamp}) = NoteData;
+
   const factory Note.list({@required List<NoteObj> notes}) = NoteList;
   factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
 }

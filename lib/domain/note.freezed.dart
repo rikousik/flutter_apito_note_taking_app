@@ -12,6 +12,8 @@ Note _$NoteFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType'] as String) {
     case 'default':
       return NoteObj.fromJson(json);
+    case 'data':
+      return NoteData.fromJson(json);
     case 'list':
       return NoteList.fromJson(json);
 
@@ -25,14 +27,22 @@ class _$NoteTearOff {
   const _$NoteTearOff();
 
 // ignore: unused_element
-  NoteObj call(
+  NoteObj call({@required NoteData data, @required String id}) {
+    return NoteObj(
+      data: data,
+      id: id,
+    );
+  }
+
+// ignore: unused_element
+  NoteData data(
       {@required String title,
       @required String note,
-      @required int timeStamp}) {
-    return NoteObj(
+      @required int timestamp}) {
+    return NoteData(
       title: title,
       note: note,
-      timeStamp: timeStamp,
+      timestamp: timestamp,
     );
   }
 
@@ -57,23 +67,27 @@ const $Note = _$NoteTearOff();
 mixin _$Note {
   @optionalTypeArgs
   TResult when<TResult extends Object>(
-    TResult $default(String title, String note, int timeStamp), {
+    TResult $default(NoteData data, String id), {
+    @required TResult data(String title, String note, int timestamp),
     @required TResult list(List<NoteObj> notes),
   });
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>(
-    TResult $default(String title, String note, int timeStamp), {
+    TResult $default(NoteData data, String id), {
+    TResult data(String title, String note, int timestamp),
     TResult list(List<NoteObj> notes),
     @required TResult orElse(),
   });
   @optionalTypeArgs
   TResult map<TResult extends Object>(
     TResult $default(NoteObj value), {
+    @required TResult data(NoteData value),
     @required TResult list(NoteList value),
   });
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>(
     TResult $default(NoteObj value), {
+    TResult data(NoteData value),
     TResult list(NoteList value),
     @required TResult orElse(),
   });
@@ -99,7 +113,7 @@ class _$NoteCopyWithImpl<$Res> implements $NoteCopyWith<$Res> {
 abstract class $NoteObjCopyWith<$Res> {
   factory $NoteObjCopyWith(NoteObj value, $Res Function(NoteObj) then) =
       _$NoteObjCopyWithImpl<$Res>;
-  $Res call({String title, String note, int timeStamp});
+  $Res call({NoteData data, String id});
 }
 
 /// @nodoc
@@ -113,14 +127,12 @@ class _$NoteObjCopyWithImpl<$Res> extends _$NoteCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object title = freezed,
-    Object note = freezed,
-    Object timeStamp = freezed,
+    Object data = freezed,
+    Object id = freezed,
   }) {
     return _then(NoteObj(
-      title: title == freezed ? _value.title : title as String,
-      note: note == freezed ? _value.note : note as String,
-      timeStamp: timeStamp == freezed ? _value.timeStamp : timeStamp as int,
+      data: data == freezed ? _value.data : data as NoteData,
+      id: id == freezed ? _value.id : id as String,
     ));
   }
 }
@@ -129,46 +141,38 @@ class _$NoteObjCopyWithImpl<$Res> extends _$NoteCopyWithImpl<$Res>
 
 /// @nodoc
 class _$NoteObj implements NoteObj {
-  const _$NoteObj(
-      {@required this.title, @required this.note, @required this.timeStamp})
-      : assert(title != null),
-        assert(note != null),
-        assert(timeStamp != null);
+  const _$NoteObj({@required this.data, @required this.id})
+      : assert(data != null),
+        assert(id != null);
 
   factory _$NoteObj.fromJson(Map<String, dynamic> json) =>
       _$_$NoteObjFromJson(json);
 
   @override
-  final String title;
+  final NoteData data;
   @override
-  final String note;
-  @override
-  final int timeStamp;
+  final String id;
 
   @override
   String toString() {
-    return 'Note(title: $title, note: $note, timeStamp: $timeStamp)';
+    return 'Note(data: $data, id: $id)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is NoteObj &&
-            (identical(other.title, title) ||
-                const DeepCollectionEquality().equals(other.title, title)) &&
-            (identical(other.note, note) ||
-                const DeepCollectionEquality().equals(other.note, note)) &&
-            (identical(other.timeStamp, timeStamp) ||
-                const DeepCollectionEquality()
-                    .equals(other.timeStamp, timeStamp)));
+            (identical(other.data, data) ||
+                const DeepCollectionEquality().equals(other.data, data)) &&
+            (identical(other.id, id) ||
+                const DeepCollectionEquality().equals(other.id, id)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(title) ^
-      const DeepCollectionEquality().hash(note) ^
-      const DeepCollectionEquality().hash(timeStamp);
+      const DeepCollectionEquality().hash(data) ^
+      const DeepCollectionEquality().hash(id);
 
   @override
   $NoteObjCopyWith<NoteObj> get copyWith =>
@@ -177,24 +181,27 @@ class _$NoteObj implements NoteObj {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>(
-    TResult $default(String title, String note, int timeStamp), {
+    TResult $default(NoteData data, String id), {
+    @required TResult data(String title, String note, int timestamp),
     @required TResult list(List<NoteObj> notes),
   }) {
     assert($default != null);
+    assert(data != null);
     assert(list != null);
-    return $default(title, note, timeStamp);
+    return $default(this.data, id);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>(
-    TResult $default(String title, String note, int timeStamp), {
+    TResult $default(NoteData data, String id), {
+    TResult data(String title, String note, int timestamp),
     TResult list(List<NoteObj> notes),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
     if ($default != null) {
-      return $default(title, note, timeStamp);
+      return $default(this.data, id);
     }
     return orElse();
   }
@@ -203,9 +210,11 @@ class _$NoteObj implements NoteObj {
   @optionalTypeArgs
   TResult map<TResult extends Object>(
     TResult $default(NoteObj value), {
+    @required TResult data(NoteData value),
     @required TResult list(NoteList value),
   }) {
     assert($default != null);
+    assert(data != null);
     assert(list != null);
     return $default(this);
   }
@@ -214,6 +223,7 @@ class _$NoteObj implements NoteObj {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>(
     TResult $default(NoteObj value), {
+    TResult data(NoteData value),
     TResult list(NoteList value),
     @required TResult orElse(),
   }) {
@@ -231,17 +241,169 @@ class _$NoteObj implements NoteObj {
 }
 
 abstract class NoteObj implements Note {
-  const factory NoteObj(
-      {@required String title,
-      @required String note,
-      @required int timeStamp}) = _$NoteObj;
+  const factory NoteObj({@required NoteData data, @required String id}) =
+      _$NoteObj;
 
   factory NoteObj.fromJson(Map<String, dynamic> json) = _$NoteObj.fromJson;
 
+  NoteData get data;
+  String get id;
+  $NoteObjCopyWith<NoteObj> get copyWith;
+}
+
+/// @nodoc
+abstract class $NoteDataCopyWith<$Res> {
+  factory $NoteDataCopyWith(NoteData value, $Res Function(NoteData) then) =
+      _$NoteDataCopyWithImpl<$Res>;
+  $Res call({String title, String note, int timestamp});
+}
+
+/// @nodoc
+class _$NoteDataCopyWithImpl<$Res> extends _$NoteCopyWithImpl<$Res>
+    implements $NoteDataCopyWith<$Res> {
+  _$NoteDataCopyWithImpl(NoteData _value, $Res Function(NoteData) _then)
+      : super(_value, (v) => _then(v as NoteData));
+
+  @override
+  NoteData get _value => super._value as NoteData;
+
+  @override
+  $Res call({
+    Object title = freezed,
+    Object note = freezed,
+    Object timestamp = freezed,
+  }) {
+    return _then(NoteData(
+      title: title == freezed ? _value.title : title as String,
+      note: note == freezed ? _value.note : note as String,
+      timestamp: timestamp == freezed ? _value.timestamp : timestamp as int,
+    ));
+  }
+}
+
+@JsonSerializable()
+
+/// @nodoc
+class _$NoteData implements NoteData {
+  const _$NoteData(
+      {@required this.title, @required this.note, @required this.timestamp})
+      : assert(title != null),
+        assert(note != null),
+        assert(timestamp != null);
+
+  factory _$NoteData.fromJson(Map<String, dynamic> json) =>
+      _$_$NoteDataFromJson(json);
+
+  @override
+  final String title;
+  @override
+  final String note;
+  @override
+  final int timestamp;
+
+  @override
+  String toString() {
+    return 'Note.data(title: $title, note: $note, timestamp: $timestamp)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is NoteData &&
+            (identical(other.title, title) ||
+                const DeepCollectionEquality().equals(other.title, title)) &&
+            (identical(other.note, note) ||
+                const DeepCollectionEquality().equals(other.note, note)) &&
+            (identical(other.timestamp, timestamp) ||
+                const DeepCollectionEquality()
+                    .equals(other.timestamp, timestamp)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(title) ^
+      const DeepCollectionEquality().hash(note) ^
+      const DeepCollectionEquality().hash(timestamp);
+
+  @override
+  $NoteDataCopyWith<NoteData> get copyWith =>
+      _$NoteDataCopyWithImpl<NoteData>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object>(
+    TResult $default(NoteData data, String id), {
+    @required TResult data(String title, String note, int timestamp),
+    @required TResult list(List<NoteObj> notes),
+  }) {
+    assert($default != null);
+    assert(data != null);
+    assert(list != null);
+    return data(title, note, timestamp);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object>(
+    TResult $default(NoteData data, String id), {
+    TResult data(String title, String note, int timestamp),
+    TResult list(List<NoteObj> notes),
+    @required TResult orElse(),
+  }) {
+    assert(orElse != null);
+    if (data != null) {
+      return data(title, note, timestamp);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object>(
+    TResult $default(NoteObj value), {
+    @required TResult data(NoteData value),
+    @required TResult list(NoteList value),
+  }) {
+    assert($default != null);
+    assert(data != null);
+    assert(list != null);
+    return data(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object>(
+    TResult $default(NoteObj value), {
+    TResult data(NoteData value),
+    TResult list(NoteList value),
+    @required TResult orElse(),
+  }) {
+    assert(orElse != null);
+    if (data != null) {
+      return data(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$_$NoteDataToJson(this)..['runtimeType'] = 'data';
+  }
+}
+
+abstract class NoteData implements Note {
+  const factory NoteData(
+      {@required String title,
+      @required String note,
+      @required int timestamp}) = _$NoteData;
+
+  factory NoteData.fromJson(Map<String, dynamic> json) = _$NoteData.fromJson;
+
   String get title;
   String get note;
-  int get timeStamp;
-  $NoteObjCopyWith<NoteObj> get copyWith;
+  int get timestamp;
+  $NoteDataCopyWith<NoteData> get copyWith;
 }
 
 /// @nodoc
@@ -306,10 +468,12 @@ class _$NoteList implements NoteList {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>(
-    TResult $default(String title, String note, int timeStamp), {
+    TResult $default(NoteData data, String id), {
+    @required TResult data(String title, String note, int timestamp),
     @required TResult list(List<NoteObj> notes),
   }) {
     assert($default != null);
+    assert(data != null);
     assert(list != null);
     return list(notes);
   }
@@ -317,7 +481,8 @@ class _$NoteList implements NoteList {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>(
-    TResult $default(String title, String note, int timeStamp), {
+    TResult $default(NoteData data, String id), {
+    TResult data(String title, String note, int timestamp),
     TResult list(List<NoteObj> notes),
     @required TResult orElse(),
   }) {
@@ -332,9 +497,11 @@ class _$NoteList implements NoteList {
   @optionalTypeArgs
   TResult map<TResult extends Object>(
     TResult $default(NoteObj value), {
+    @required TResult data(NoteData value),
     @required TResult list(NoteList value),
   }) {
     assert($default != null);
+    assert(data != null);
     assert(list != null);
     return list(this);
   }
@@ -343,6 +510,7 @@ class _$NoteList implements NoteList {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object>(
     TResult $default(NoteObj value), {
+    TResult data(NoteData value),
     TResult list(NoteList value),
     @required TResult orElse(),
   }) {

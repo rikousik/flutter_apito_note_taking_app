@@ -3,7 +3,6 @@ import 'package:flutter_apito_note_taking_app/application/note_bloc/note_bloc.da
 import 'package:flutter_apito_note_taking_app/application/theme_bloc/theme_bloc.dart';
 import 'package:flutter_apito_note_taking_app/presentation/widget/home_body.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'card_item_model.dart';
 
