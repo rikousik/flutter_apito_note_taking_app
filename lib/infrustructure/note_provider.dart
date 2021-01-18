@@ -5,6 +5,7 @@ import 'package:flutter_apito_note_taking_app/domain/i_note_provider.dart';
 import 'package:flutter_apito_note_taking_app/domain/note.dart';
 import 'package:flutter_apito_note_taking_app/domain/value_failure.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 class NoteProvider extends INoteProvider {
   final String _baseUrl = "https://api.apito.io/secured/rest/my_thoughts_0pm0e";
@@ -26,6 +27,23 @@ class NoteProvider extends INoteProvider {
       final List<NoteObj> _notes = List<NoteObj>.from(_noteResponse
           .map((e) => NoteObj.fromJson(e as Map<String, dynamic>)));
       return right(NoteList(notes: _notes));
+    } catch (e) {
+      return left(ValueFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ValueFailure, Unit>> createNote({NoteData note}) async {
+    try {
+      String url = '$_baseUrl/notes';
+      Map<String, String> headers = {
+        'Authorization': _token, // set content-length
+        'Content': 'application/json'
+      };
+      Response response =
+          await http.put(url, headers: headers, body: note.toJson());
+      String body = response.body;
+      return right(unit);
     } catch (e) {
       return left(ValueFailure(errorMsg: e.toString()));
     }
