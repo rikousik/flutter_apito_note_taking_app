@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class NeuMorphicContainer extends StatelessWidget {
+class NeumorphicButton extends StatelessWidget {
   final Widget child;
   final EdgeInsets padding;
   final EdgeInsets margin;
 
-  const NeuMorphicContainer(
+  const NeumorphicButton(
       {Key key, @required this.child, this.padding, this.margin})
       : super(key: key);
 
@@ -23,11 +23,14 @@ class NeuMorphicContainer extends StatelessWidget {
             BoxShadow(
                 offset: const Offset(10, 10),
                 color: _theme.colorScheme.primary,
+                spreadRadius: -10,
                 blurRadius: 10),
             BoxShadow(
-                offset: const Offset(-10, -10),
-                color: _theme.colorScheme.secondary,
-                blurRadius: 10)
+              offset: const Offset(-10, -10),
+              color: _theme.colorScheme.secondary,
+              blurRadius: 10,
+              spreadRadius: -10,
+            )
           ]),
       child: child,
     );

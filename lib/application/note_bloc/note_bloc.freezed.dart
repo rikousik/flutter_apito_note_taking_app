@@ -147,10 +147,14 @@ class _$NoteStateTearOff {
   const _$NoteStateTearOff();
 
 // ignore: unused_element
-  _NoteState call({@required NoteList noteList, @required int cardIndex}) {
+  _NoteState call(
+      {@required NoteList noteList,
+      @required bool isLoading,
+      @required String errorMsg}) {
     return _NoteState(
       noteList: noteList,
-      cardIndex: cardIndex,
+      isLoading: isLoading,
+      errorMsg: errorMsg,
     );
   }
 }
@@ -162,7 +166,8 @@ const $NoteState = _$NoteStateTearOff();
 /// @nodoc
 mixin _$NoteState {
   NoteList get noteList;
-  int get cardIndex;
+  bool get isLoading;
+  String get errorMsg;
 
   $NoteStateCopyWith<NoteState> get copyWith;
 }
@@ -171,7 +176,7 @@ mixin _$NoteState {
 abstract class $NoteStateCopyWith<$Res> {
   factory $NoteStateCopyWith(NoteState value, $Res Function(NoteState) then) =
       _$NoteStateCopyWithImpl<$Res>;
-  $Res call({NoteList noteList, int cardIndex});
+  $Res call({NoteList noteList, bool isLoading, String errorMsg});
 }
 
 /// @nodoc
@@ -185,11 +190,13 @@ class _$NoteStateCopyWithImpl<$Res> implements $NoteStateCopyWith<$Res> {
   @override
   $Res call({
     Object noteList = freezed,
-    Object cardIndex = freezed,
+    Object isLoading = freezed,
+    Object errorMsg = freezed,
   }) {
     return _then(_value.copyWith(
       noteList: noteList == freezed ? _value.noteList : noteList as NoteList,
-      cardIndex: cardIndex == freezed ? _value.cardIndex : cardIndex as int,
+      isLoading: isLoading == freezed ? _value.isLoading : isLoading as bool,
+      errorMsg: errorMsg == freezed ? _value.errorMsg : errorMsg as String,
     ));
   }
 }
@@ -200,7 +207,7 @@ abstract class _$NoteStateCopyWith<$Res> implements $NoteStateCopyWith<$Res> {
           _NoteState value, $Res Function(_NoteState) then) =
       __$NoteStateCopyWithImpl<$Res>;
   @override
-  $Res call({NoteList noteList, int cardIndex});
+  $Res call({NoteList noteList, bool isLoading, String errorMsg});
 }
 
 /// @nodoc
@@ -215,29 +222,37 @@ class __$NoteStateCopyWithImpl<$Res> extends _$NoteStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object noteList = freezed,
-    Object cardIndex = freezed,
+    Object isLoading = freezed,
+    Object errorMsg = freezed,
   }) {
     return _then(_NoteState(
       noteList: noteList == freezed ? _value.noteList : noteList as NoteList,
-      cardIndex: cardIndex == freezed ? _value.cardIndex : cardIndex as int,
+      isLoading: isLoading == freezed ? _value.isLoading : isLoading as bool,
+      errorMsg: errorMsg == freezed ? _value.errorMsg : errorMsg as String,
     ));
   }
 }
 
 /// @nodoc
 class _$_NoteState implements _NoteState {
-  const _$_NoteState({@required this.noteList, @required this.cardIndex})
+  const _$_NoteState(
+      {@required this.noteList,
+      @required this.isLoading,
+      @required this.errorMsg})
       : assert(noteList != null),
-        assert(cardIndex != null);
+        assert(isLoading != null),
+        assert(errorMsg != null);
 
   @override
   final NoteList noteList;
   @override
-  final int cardIndex;
+  final bool isLoading;
+  @override
+  final String errorMsg;
 
   @override
   String toString() {
-    return 'NoteState(noteList: $noteList, cardIndex: $cardIndex)';
+    return 'NoteState(noteList: $noteList, isLoading: $isLoading, errorMsg: $errorMsg)';
   }
 
   @override
@@ -247,16 +262,20 @@ class _$_NoteState implements _NoteState {
             (identical(other.noteList, noteList) ||
                 const DeepCollectionEquality()
                     .equals(other.noteList, noteList)) &&
-            (identical(other.cardIndex, cardIndex) ||
+            (identical(other.isLoading, isLoading) ||
                 const DeepCollectionEquality()
-                    .equals(other.cardIndex, cardIndex)));
+                    .equals(other.isLoading, isLoading)) &&
+            (identical(other.errorMsg, errorMsg) ||
+                const DeepCollectionEquality()
+                    .equals(other.errorMsg, errorMsg)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(noteList) ^
-      const DeepCollectionEquality().hash(cardIndex);
+      const DeepCollectionEquality().hash(isLoading) ^
+      const DeepCollectionEquality().hash(errorMsg);
 
   @override
   _$NoteStateCopyWith<_NoteState> get copyWith =>
@@ -265,12 +284,16 @@ class _$_NoteState implements _NoteState {
 
 abstract class _NoteState implements NoteState {
   const factory _NoteState(
-      {@required NoteList noteList, @required int cardIndex}) = _$_NoteState;
+      {@required NoteList noteList,
+      @required bool isLoading,
+      @required String errorMsg}) = _$_NoteState;
 
   @override
   NoteList get noteList;
   @override
-  int get cardIndex;
+  bool get isLoading;
+  @override
+  String get errorMsg;
   @override
   _$NoteStateCopyWith<_NoteState> get copyWith;
 }

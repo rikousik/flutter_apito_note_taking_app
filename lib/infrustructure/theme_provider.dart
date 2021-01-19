@@ -8,12 +8,16 @@ class ThemeProvider extends IThemeProvider {
   ThemeProvider({@required this.localStorage});
 
   final ThemeData _darkTheme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: Colors.grey.shade800,
-    primaryColor: Colors.grey.shade800,
+    scaffoldBackgroundColor: const Color(0xFF292D32),
+    primaryColor: const Color(0xFF292D32),
     appBarTheme: const AppBarTheme(
       elevation: 0,
       centerTitle: true,
     ),
+    colorScheme: ThemeData.dark().colorScheme.copyWith(
+        primary: Colors.black.withOpacity(0.4),
+        secondary: Colors.white.withOpacity(0.1),
+        primaryVariant: Colors.white),
     accentColor: Colors.grey.shade200,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -31,12 +35,17 @@ class ThemeProvider extends IThemeProvider {
     ),
   );
   final ThemeData _lightTheme = ThemeData.light().copyWith(
-    scaffoldBackgroundColor: Colors.grey.shade200,
-    primaryColor: Colors.grey.shade200,
+    scaffoldBackgroundColor: Colors.grey.shade100,
+    primaryColor: Colors.grey.shade100,
     appBarTheme: const AppBarTheme(
       elevation: 0,
       centerTitle: true,
     ),
+    iconTheme: ThemeData.light().iconTheme.copyWith(color: Colors.black),
+    colorScheme: ThemeData.light().colorScheme.copyWith(
+        primaryVariant: Colors.black,
+        primary: Colors.black.withOpacity(0.075),
+        secondary: Colors.white),
     accentColor: Colors.white,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

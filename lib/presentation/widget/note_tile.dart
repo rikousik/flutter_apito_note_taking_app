@@ -1,40 +1,57 @@
 import 'package:flutter/material.dart';
-import 'custom_decoration.dart';
+import 'package:flutter_apito_note_taking_app/domain/note.dart';
+import 'package:flutter_apito_note_taking_app/presentation/note_form_page.dart';
 
-class NMCard extends StatelessWidget {
-  final bool active;
-  final IconData icon;
-  final String label;
-  NMCard({this.active, this.icon, this.label});
+import 'neumorphic_container.dart';
 
-  final CustomBoxDecoration _cst = CustomBoxDecoration();
+class NoteTile extends StatelessWidget {
+  final NoteObj note;
+  const NoteTile({Key key, this.note}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-      decoration: _cst.nMbox(),
-      child: Row(
-        children: <Widget>[
-          Icon(icon, color: _cst.fCL),
-          const SizedBox(width: 15),
-          Text(
-            label,
-            style: TextStyle(
-                color: _cst.fCD, fontWeight: FontWeight.w700, fontSize: 16),
-          ),
-          const Spacer(),
-          Container(
-            decoration: active ? _cst.nMboxInvertActive() : _cst.nMboxInvert(),
-            width: 70,
-            height: 40,
-            child: Container(
-              margin: active
-                  ? const EdgeInsets.fromLTRB(35, 5, 5, 5)
-                  : const EdgeInsets.fromLTRB(5, 5, 35, 5),
-              decoration: _cst.nMbtn(),
+    final ThemeData _theme = Theme.of(context);
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NoteFormPage(
+                    note: note,
+                  )),
+        );
+      },
+      child: NeuMorphicContainer(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  note.data.title,
+                  style: _theme.textTheme.headline5,
+                ),
+                Text(
+                  "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+                  style: _theme.textTheme.headline5.copyWith(
+                      color: _theme.textTheme.headline5.color.withOpacity(0.4)),
+                ),
+              ],
             ),
-          ),
-        ],
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              note.data.note,
+              overflow: TextOverflow.ellipsis,
+              style: _theme.textTheme.bodyText1,
+              maxLines: 3,
+            ),
+          ],
+        ),
       ),
     );
   }

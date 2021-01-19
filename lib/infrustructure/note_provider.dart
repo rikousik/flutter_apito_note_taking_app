@@ -35,15 +35,58 @@ class NoteProvider extends INoteProvider {
   @override
   Future<Either<ValueFailure, Unit>> createNote({NoteData note}) async {
     try {
-      String url = '$_baseUrl/notes';
-      Map<String, String> headers = {
+      final String url = '$_baseUrl/notes';
+
+      final Map<String, String> headers = {
         'Authorization': _token, // set content-length
         'Content': 'application/json'
       };
-      Response response =
-          await http.put(url, headers: headers, body: note.toJson());
-      String body = response.body;
-      return right(unit);
+      final Response response = await http.put(url,
+          headers: headers, body: jsonEncode(note.toJson()));
+      if (response.statusCode == 200) {
+        return right(unit);
+      } else {
+        return left(ValueFailure(errorMsg: response.body));
+      }
+    } catch (e) {
+      return left(ValueFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ValueFailure, Unit>> deleteNote({NoteObj note}) async {
+    try {
+      final String url = '$_baseUrl/notes?_id=${note.id}';
+      final Map<String, String> headers = {
+        'Authorization': _token, // set content-length
+        'Content': 'application/json'
+      };
+      final Response response = await http.delete(url, headers: headers);
+      if (response.statusCode == 200) {
+        return right(unit);
+      } else {
+        return left(ValueFailure(errorMsg: response.body));
+      }
+    } catch (e) {
+      return left(ValueFailure(errorMsg: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<ValueFailure, Unit>> updateNote({NoteObj note}) async {
+    try {
+      final String url = '$_baseUrl/notes?_id=${note.id}';
+      final Map<String, String> headers = {
+        'Authorization': _token, // set content-length
+        'Content': 'application/json'
+      };
+      final Response response = await http.post(url,
+          headers: headers, body: jsonEncode(note.data.toJson()));
+      if (response.statusCode == 200) {
+        return right(unit);
+      } else {
+        return left(ValueFailure(errorMsg: response.body));
+      }
     } catch (e) {
       return left(ValueFailure(errorMsg: e.toString()));
     }

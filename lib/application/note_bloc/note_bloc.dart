@@ -23,13 +23,13 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     NoteEvent event,
   ) async* {
     yield* event.map(loadNotes: (e) async* {
+      yield state.copyWith(isLoading: true);
       final Either<ValueFailure, NoteList> _noteListResponse =
           await noteProvider.getNoteList();
 
-      yield _noteListResponse.fold((l) {
-        print(l);
-        return state;
-      }, (r) => state.copyWith(noteList: r));
+      yield _noteListResponse.fold(
+          (l) => state.copyWith(isLoading: false, errorMsg: l.toString()),
+          (r) => state.copyWith(isLoading: false, noteList: r));
     });
   }
 }
