@@ -13,23 +13,23 @@ part 'note_event.dart';
 part 'note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  final INoteProvider noteProvider;
+  final INoteProvider noteProvider; //need Inoteprovider to call note getting function
   NoteBloc({
     @required this.noteProvider,
-  }) : super(NoteState.initial());
+  }) : super(NoteState.initial());// constructor and note state initializer
 
   @override
-  Stream<NoteState> mapEventToState(
+  Stream<NoteState> mapEventToState(  //
     NoteEvent event,
   ) async* {
     yield* event.map(loadNotes: (e) async* {
-      yield state.copyWith(isLoading: true);
+      yield state.copyWith(isLoading: true);//is loading will be true when data will be loaded from server to notelist
       final Either<ValueFailure, NoteList> _noteListResponse =
-          await noteProvider.getNoteList();
+          await noteProvider.getNoteList();//getting the data in_notelistresponse
 
       yield _noteListResponse.fold(
-          (l) => state.copyWith(isLoading: false, errorMsg: l.toString()),
-          (r) => state.copyWith(isLoading: false, noteList: r));
+          (l) => state.copyWith(isLoading: false, errorMsg: l.toString()),//left if there is an error
+          (r) => state.copyWith(isLoading: false, noteList: r));//right if the data is loaded successfully and will turn isLoading to false
     });
   }
 }

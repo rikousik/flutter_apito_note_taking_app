@@ -13,38 +13,39 @@ class NoteProvider extends INoteProvider {
       "Bearer 6rZAmjwaAxXaFQa3H0l4x8007FUxxbpwBzZzcPDxXRORU0TQsCP6lyXMz4cuP1vpOGoGMAJJ9MdSonKeXha8QDJBM1Gb7KBgCdg58n8rhBStvYphk6uqOgBP4q6FDRGNXUs2CI7f9AFZkACpZIp78WQ7cgVP4EJ";
 
   @override
-  Future<Either<ValueFailure, NoteList>> getNoteList() async {
+  Future<Either<ValueFailure, NoteList>> getNoteList() async { // Function that will request note list from restAPI The output will be value or value failure
     try {
       final http.Response _response =
-          await http.get("$_baseUrl/notes", headers: {
+          await http.get("$_baseUrl/notes", headers: { //will get the data from /notes
         'Authorization': _token, // set content-length
         'Content': 'application/json'
       });
 
       final List<dynamic> _noteResponse =
-          jsonDecode(_response.body) as List<dynamic>;
+          jsonDecode(_response.body) as List<dynamic>;//response is being saved in _noteresponse which will be a list of data
 
-      final List<NoteObj> _notes = List<NoteObj>.from(_noteResponse
+      final List<NoteObj> _notes = List<NoteObj>.from(_noteResponse  // data from dynamic noteresponse list to _notes noteObject data type variable
           .map((e) => NoteObj.fromJson(e as Map<String, dynamic>)));
-      return right(NoteList(notes: _notes));
+      return right(NoteList(notes: _notes));// _notes private variable to predeclared list notes
     } catch (e) {
-      return left(ValueFailure(errorMsg: e.toString()));
+
+      return left(ValueFailure(errorMsg: e.toString()));//if value failure ...show error message
     }
   }
 
   @override
-  Future<Either<ValueFailure, Unit>> createNote({NoteData note}) async {
+  Future<Either<ValueFailure, Unit>> createNote({NoteData note}) async {//function that will create note
     try {
-      final String url = '$_baseUrl/notes';
+      final String url = '$_baseUrl/notes';//assigning api to a variable
 
       final Map<String, String> headers = {
         'Authorization': _token, // set content-length
         'Content': 'application/json'
       };
-      final Response response = await http.put(url,
+      final Response response = await http.put(url,   //put query to put the data as JSon
           headers: headers, body: jsonEncode(note.toJson()));
       if (response.statusCode == 200) {
-        return right(unit);
+        return right(unit);  //if successfull return nothing
       } else {
         return left(ValueFailure(errorMsg: response.body));
       }

@@ -12,13 +12,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData _theme = Theme.of(context);
-    return BlocConsumer<NoteBloc, NoteState>(
+    return BlocConsumer<NoteBloc, NoteState>(//here we will be using bloc
+
       listenWhen: (p, c) =>
-          p.isLoading != c.isLoading || p.errorMsg != c.errorMsg,
+          p.isLoading != c.isLoading || p.errorMsg != c.errorMsg,//it will match the isLoading variable and will be listening for i
       listener: (context, state) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).hideCurrentSnackBar(); //snackbar will be hidden
         if (state.errorMsg.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar( //snackbar will be showed if there is an error
             elevation: 6.0,
             backgroundColor: Colors.redAccent,
             behavior: SnackBarBehavior.floating,
@@ -29,8 +30,8 @@ class HomePage extends StatelessWidget {
           ));
         }
 
-        if (state.isLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        if (state.isLoading) {  //if the isloading is true
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(//snackbar will show loading sign
             elevation: 6.0,
             behavior: SnackBarBehavior.floating,
             content: Row(
@@ -72,8 +73,8 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            body: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,8 +88,8 @@ class HomePage extends StatelessWidget {
                   ),
                   ListView.builder(
                       shrinkWrap: true,
-                      itemCount: state.noteList.notes.length,
-                      itemBuilder: (context, index) => NoteTile(
+                      itemCount: state.noteList.notes.length,//length of the note list
+                      itemBuilder: (context, index) => NoteTile( //getting notes from bloc
                             note: state.noteList.notes[index],
                           ))
                 ],
