@@ -8,9 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class NoteProvider extends INoteProvider {
-  final String _baseUrl = "https://api.apito.io/secured/rest/my_thoughts_0pm0e";
-  final String _token =
-      "Bearer 6rZAmjwaAxXaFQa3H0l4x8007FUxxbpwBzZzcPDxXRORU0TQsCP6lyXMz4cuP1vpOGoGMAJJ9MdSonKeXha8QDJBM1Gb7KBgCdg58n8rhBStvYphk6uqOgBP4q6FDRGNXUs2CI7f9AFZkACpZIp78WQ7cgVP4EJ";
+  final String _baseUrl = '';
+  final String _token = '';
 
   @override
   Future<Either<ValueFailure, NoteList>> getNoteList() async {
