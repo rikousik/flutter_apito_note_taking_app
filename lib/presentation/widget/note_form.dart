@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_apito_note_taking_app/application/note_bloc/note_bloc.dart';
 import 'package:flutter_apito_note_taking_app/application/note_form_bloc/note_form_bloc.dart';
 import 'package:flutter_apito_note_taking_app/domain/note.dart';
-import 'package:flutter_apito_note_taking_app/presentation/widget/neumorphic_textfield.dart';
-import 'package:flutter_apito_note_taking_app/presentation/widget/theme_changer.dart';
+import 'package:flutter_apito_note_taking_app/presentation/widget/custom_snackbar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
-import 'neumorphic_container.dart';
 
 class NoteForm extends HookWidget {
   final NoteObj note;
@@ -29,15 +26,9 @@ class NoteForm extends HookWidget {
           p.isLoading != c.isLoading || p.errorMsg != c.errorMsg,
       listener: (context, state) {
         if (state.errorMsg.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            elevation: 6.0,
-            backgroundColor: Colors.redAccent,
-            behavior: SnackBarBehavior.floating,
-            content: Text(
-              state.errorMsg,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ));
+          CustomSnackBar(context).message(
+            message: state.errorMsg,
+          );
         }
         if (state.toHomePage) {
           _noteBloc.add(const LoadNotes());
@@ -45,113 +36,126 @@ class NoteForm extends HookWidget {
         }
 
         if (state.isLoading) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            elevation: 6.0,
-            behavior: SnackBarBehavior.floating,
-            content: Row(
-              children: const [
-                CircularProgressIndicator(),
-                SizedBox(
-                  width: 20,
-                ),
-                Text("  Loading ...")
-              ],
-            ),
-          ));
+          CustomSnackBar(context).loading();
         }
       },
       builder: (context, state) {
         return Scaffold(
+          backgroundColor: const Color(0xFFD6E4EE),
           appBar: AppBar(
-            actions: const [ThemeChangerIcon()],
-            title: Text(
+            backgroundColor: Colors.redAccent,
+            title: const Text(
               'Note Form',
-              style: Theme.of(context).textTheme.headline4,
             ),
           ),
-          bottomNavigationBar: note.id.isEmpty
-              ? NeuMorphicContainer(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  child: TextButton(
-                    onPressed: () {
-                      _noteFormBloc.add(CreateNote(
-                          note: NoteObj(
-                              data: NoteData(
-                                  title: _titleController.text,
-                                  note: _noteController.text,
-                                  timestamp:
-                                      DateTime.now().millisecondsSinceEpoch),
-                              id: '')));
-                    },
-                    child: Text(
-                      'Add Note',
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    NeuMorphicContainer(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 50,
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          _noteFormBloc.add(UpdateNote(
-                              note: NoteObj(
-                                  data: NoteData(
-                                      title: _titleController.text,
-                                      note: _noteController.text,
-                                      timestamp: DateTime.now()
-                                          .millisecondsSinceEpoch),
-                                  id: note.id)));
-                        },
-                        child: Text(
-                          'Update Note',
-                          style: Theme.of(context).textTheme.subtitle1,
-                        ),
-                      ),
-                    ),
-                    NeuMorphicContainer(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      child: TextButton(
-                        onPressed: () {
-                          _noteFormBloc.add(DeleteNote(
-                              note: NoteObj(
-                                  data: NoteData(
-                                      title: _titleController.text,
-                                      note: _noteController.text,
-                                      timestamp: DateTime.now()
-                                          .millisecondsSinceEpoch),
-                                  id: note.id)));
-                        },
-                        child: Icon(
-                          Icons.delete,
-                          color: Theme.of(context).colorScheme.primaryVariant,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
           body: Form(
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  NeumorphicTextField(
-                    controller: _titleController,
-                    hint: 'Title',
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white, // background
+                              onPrimary: Colors.blueGrey, // foreground
+                            ),
+                            onPressed: () {
+                              if (state.note.id.isEmpty) {
+                                _noteFormBloc.add(CreateNote(
+                                  note: state.note.copyWith(
+                                    data: NoteData(
+                                      title: _titleController.text,
+                                      note: _noteController.text,
+                                    ),
+                                  ),
+                                ));
+                              } else {
+                                _noteFormBloc.add(UpdateNote(
+                                  note: state.note.copyWith(
+                                    data: NoteData(
+                                      title: _titleController.text,
+                                      note: _noteController.text,
+                                    ),
+                                  ),
+                                ));
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Icon(Icons.save),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Save',
+                                  ),
+                                ],
+                              ),
+                            )),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        if (note.id.isNotEmpty)
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.white, // background
+                                onPrimary: Colors.blueGrey, // foreground
+                              ),
+                              onPressed: () {
+                                _noteFormBloc.add(DeleteNote(note: state.note));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                child:
+                                    const Icon(Icons.delete_forever_outlined),
+                              )),
+                      ],
+                    ),
                   ),
-                  NeumorphicTextField(
-                    controller: _noteController,
-                    hint: 'Note',
-                    minLine: 25,
-                    maxLength: 500,
-                  ),
+                  Card(
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            style: Theme.of(context).textTheme.headline6,
+                            controller: _titleController,
+                            decoration: const InputDecoration(
+                              hintText: 'Title',
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                            ),
+                          ),
+                          const Divider(),
+                          TextFormField(
+                            controller: _noteController,
+                            minLines: 15,
+                            maxLines: 200,
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1
+                                .copyWith(color: Colors.grey, height: 1.5),
+                            decoration: const InputDecoration(
+                              hintText: 'Note',
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

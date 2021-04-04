@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_apito_note_taking_app/application/note_bloc/note_bloc.dart';
 import 'package:flutter_apito_note_taking_app/domain/note.dart';
-import 'package:flutter_apito_note_taking_app/presentation/widget/neumorphic_container.dart';
+import 'package:flutter_apito_note_taking_app/presentation/widget/custom_snackbar.dart';
 import 'package:flutter_apito_note_taking_app/presentation/widget/note_tile.dart';
-import 'package:flutter_apito_note_taking_app/presentation/widget/theme_changer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'note_form_page.dart';
@@ -11,90 +10,52 @@ import 'note_form_page.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ThemeData _theme = Theme.of(context);
-    return BlocConsumer<NoteBloc, NoteState>(//here we will be using bloc
-
+    return BlocConsumer<NoteBloc, NoteState>(
       listenWhen: (p, c) =>
-          p.isLoading != c.isLoading || p.errorMsg != c.errorMsg,//it will match the isLoading variable and will be listening for i
+          p.isLoading != c.isLoading || p.errorMsg != c.errorMsg,
       listener: (context, state) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar(); //snackbar will be hidden
+        CustomSnackBar(context).hide();
         if (state.errorMsg.isNotEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar( //snackbar will be showed if there is an error
-            elevation: 6.0,
-            backgroundColor: Colors.redAccent,
-            behavior: SnackBarBehavior.floating,
-            content: Text(
-              state.errorMsg,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ));
+          CustomSnackBar(context).message(message: state.errorMsg);
         }
 
-        if (state.isLoading) {  //if the isloading is true
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(//snackbar will show loading sign
-            elevation: 6.0,
-            behavior: SnackBarBehavior.floating,
-            content: Row(
-              children: const [
-                CircularProgressIndicator(),
-                SizedBox(
-                  width: 20,
-                ),
-                Text("  Loading ...")
-              ],
-            ),
-          ));
+        if (state.isLoading) {
+          CustomSnackBar(context).loading();
         }
       },
       builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(
-              actions: const [ThemeChangerIcon()],
-              title: Text(
-                'My Thoughts',
-                style: _theme.textTheme.headline4,
-              ),
+          backgroundColor: const Color(0xFFD6E4EE),
+          appBar: AppBar(
+            backgroundColor: Colors.redAccent,
+            title: const Text(
+              'Apito Note',
             ),
-            bottomNavigationBar: NeuMorphicContainer(
-              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NoteFormPage(
-                              note: Note.empty() as NoteObj,
-                            )),
-                  );
-                },
-                child: Text(
-                  'Add Note',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-              ),
-            ),
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Write whatever your mind says\nand save it to Apito",
-                    style: _theme.textTheme.subtitle1,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Divider(),
-                  ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: state.noteList.notes.length,//length of the note list
-                      itemBuilder: (context, index) => NoteTile( //getting notes from bloc
-                            note: state.noteList.notes[index],
-                          ))
-                ],
-              ),
-            ));
+          ),
+          body: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: state.noteList.notes.length,
+                itemBuilder: (context, index) => NoteTile(
+                      note: state.noteList.notes[index],
+                    )),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoteFormPage(
+                          note: Note.empty() as NoteObj,
+                        )),
+              );
+            },
+            tooltip: 'Add Note',
+            backgroundColor: Colors.redAccent,
+            child: const Icon(Icons.add),
+          ),
+        );
       },
     );
   }

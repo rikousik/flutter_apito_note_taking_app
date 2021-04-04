@@ -27,22 +27,20 @@ class _$NoteTearOff {
   const _$NoteTearOff();
 
 // ignore: unused_element
-  NoteObj call({@required NoteData data, @required String id}) {
+  NoteObj call(
+      {@required NoteData data, @required String id, @required Meta meta}) {
     return NoteObj(
       data: data,
       id: id,
+      meta: meta,
     );
   }
 
 // ignore: unused_element
-  NoteData data(
-      {@required String title,
-      @required String note,
-      @required int timestamp}) {
+  NoteData data({@required String title, @required String note}) {
     return NoteData(
       title: title,
       note: note,
-      timestamp: timestamp,
     );
   }
 
@@ -67,14 +65,14 @@ const $Note = _$NoteTearOff();
 mixin _$Note {
   @optionalTypeArgs
   TResult when<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    @required TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    @required TResult data(String title, String note),
     @required TResult list(List<NoteObj> notes),
   });
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    TResult data(String title, String note),
     TResult list(List<NoteObj> notes),
     @required TResult orElse(),
   });
@@ -113,7 +111,9 @@ class _$NoteCopyWithImpl<$Res> implements $NoteCopyWith<$Res> {
 abstract class $NoteObjCopyWith<$Res> {
   factory $NoteObjCopyWith(NoteObj value, $Res Function(NoteObj) then) =
       _$NoteObjCopyWithImpl<$Res>;
-  $Res call({NoteData data, String id});
+  $Res call({NoteData data, String id, Meta meta});
+
+  $MetaCopyWith<$Res> get meta;
 }
 
 /// @nodoc
@@ -129,11 +129,23 @@ class _$NoteObjCopyWithImpl<$Res> extends _$NoteCopyWithImpl<$Res>
   $Res call({
     Object data = freezed,
     Object id = freezed,
+    Object meta = freezed,
   }) {
     return _then(NoteObj(
       data: data == freezed ? _value.data : data as NoteData,
       id: id == freezed ? _value.id : id as String,
+      meta: meta == freezed ? _value.meta : meta as Meta,
     ));
+  }
+
+  @override
+  $MetaCopyWith<$Res> get meta {
+    if (_value.meta == null) {
+      return null;
+    }
+    return $MetaCopyWith<$Res>(_value.meta, (value) {
+      return _then(_value.copyWith(meta: value));
+    });
   }
 }
 
@@ -141,9 +153,10 @@ class _$NoteObjCopyWithImpl<$Res> extends _$NoteCopyWithImpl<$Res>
 
 /// @nodoc
 class _$NoteObj implements NoteObj {
-  const _$NoteObj({@required this.data, @required this.id})
+  const _$NoteObj({@required this.data, @required this.id, @required this.meta})
       : assert(data != null),
-        assert(id != null);
+        assert(id != null),
+        assert(meta != null);
 
   factory _$NoteObj.fromJson(Map<String, dynamic> json) =>
       _$_$NoteObjFromJson(json);
@@ -152,10 +165,12 @@ class _$NoteObj implements NoteObj {
   final NoteData data;
   @override
   final String id;
+  @override
+  final Meta meta;
 
   @override
   String toString() {
-    return 'Note(data: $data, id: $id)';
+    return 'Note(data: $data, id: $id, meta: $meta)';
   }
 
   @override
@@ -165,14 +180,17 @@ class _$NoteObj implements NoteObj {
             (identical(other.data, data) ||
                 const DeepCollectionEquality().equals(other.data, data)) &&
             (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)));
+                const DeepCollectionEquality().equals(other.id, id)) &&
+            (identical(other.meta, meta) ||
+                const DeepCollectionEquality().equals(other.meta, meta)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(data) ^
-      const DeepCollectionEquality().hash(id);
+      const DeepCollectionEquality().hash(id) ^
+      const DeepCollectionEquality().hash(meta);
 
   @override
   $NoteObjCopyWith<NoteObj> get copyWith =>
@@ -181,27 +199,27 @@ class _$NoteObj implements NoteObj {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    @required TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    @required TResult data(String title, String note),
     @required TResult list(List<NoteObj> notes),
   }) {
     assert($default != null);
     assert(data != null);
     assert(list != null);
-    return $default(this.data, id);
+    return $default(this.data, id, meta);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    TResult data(String title, String note),
     TResult list(List<NoteObj> notes),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
     if ($default != null) {
-      return $default(this.data, id);
+      return $default(this.data, id, meta);
     }
     return orElse();
   }
@@ -241,13 +259,16 @@ class _$NoteObj implements NoteObj {
 }
 
 abstract class NoteObj implements Note {
-  const factory NoteObj({@required NoteData data, @required String id}) =
-      _$NoteObj;
+  const factory NoteObj(
+      {@required NoteData data,
+      @required String id,
+      @required Meta meta}) = _$NoteObj;
 
   factory NoteObj.fromJson(Map<String, dynamic> json) = _$NoteObj.fromJson;
 
   NoteData get data;
   String get id;
+  Meta get meta;
   $NoteObjCopyWith<NoteObj> get copyWith;
 }
 
@@ -255,7 +276,7 @@ abstract class NoteObj implements Note {
 abstract class $NoteDataCopyWith<$Res> {
   factory $NoteDataCopyWith(NoteData value, $Res Function(NoteData) then) =
       _$NoteDataCopyWithImpl<$Res>;
-  $Res call({String title, String note, int timestamp});
+  $Res call({String title, String note});
 }
 
 /// @nodoc
@@ -271,12 +292,10 @@ class _$NoteDataCopyWithImpl<$Res> extends _$NoteCopyWithImpl<$Res>
   $Res call({
     Object title = freezed,
     Object note = freezed,
-    Object timestamp = freezed,
   }) {
     return _then(NoteData(
       title: title == freezed ? _value.title : title as String,
       note: note == freezed ? _value.note : note as String,
-      timestamp: timestamp == freezed ? _value.timestamp : timestamp as int,
     ));
   }
 }
@@ -285,11 +304,9 @@ class _$NoteDataCopyWithImpl<$Res> extends _$NoteCopyWithImpl<$Res>
 
 /// @nodoc
 class _$NoteData implements NoteData {
-  const _$NoteData(
-      {@required this.title, @required this.note, @required this.timestamp})
+  const _$NoteData({@required this.title, @required this.note})
       : assert(title != null),
-        assert(note != null),
-        assert(timestamp != null);
+        assert(note != null);
 
   factory _$NoteData.fromJson(Map<String, dynamic> json) =>
       _$_$NoteDataFromJson(json);
@@ -298,12 +315,10 @@ class _$NoteData implements NoteData {
   final String title;
   @override
   final String note;
-  @override
-  final int timestamp;
 
   @override
   String toString() {
-    return 'Note.data(title: $title, note: $note, timestamp: $timestamp)';
+    return 'Note.data(title: $title, note: $note)';
   }
 
   @override
@@ -313,18 +328,14 @@ class _$NoteData implements NoteData {
             (identical(other.title, title) ||
                 const DeepCollectionEquality().equals(other.title, title)) &&
             (identical(other.note, note) ||
-                const DeepCollectionEquality().equals(other.note, note)) &&
-            (identical(other.timestamp, timestamp) ||
-                const DeepCollectionEquality()
-                    .equals(other.timestamp, timestamp)));
+                const DeepCollectionEquality().equals(other.note, note)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(title) ^
-      const DeepCollectionEquality().hash(note) ^
-      const DeepCollectionEquality().hash(timestamp);
+      const DeepCollectionEquality().hash(note);
 
   @override
   $NoteDataCopyWith<NoteData> get copyWith =>
@@ -333,27 +344,27 @@ class _$NoteData implements NoteData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    @required TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    @required TResult data(String title, String note),
     @required TResult list(List<NoteObj> notes),
   }) {
     assert($default != null);
     assert(data != null);
     assert(list != null);
-    return data(title, note, timestamp);
+    return data(title, note);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    TResult data(String title, String note),
     TResult list(List<NoteObj> notes),
     @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (data != null) {
-      return data(title, note, timestamp);
+      return data(title, note);
     }
     return orElse();
   }
@@ -393,16 +404,13 @@ class _$NoteData implements NoteData {
 }
 
 abstract class NoteData implements Note {
-  const factory NoteData(
-      {@required String title,
-      @required String note,
-      @required int timestamp}) = _$NoteData;
+  const factory NoteData({@required String title, @required String note}) =
+      _$NoteData;
 
   factory NoteData.fromJson(Map<String, dynamic> json) = _$NoteData.fromJson;
 
   String get title;
   String get note;
-  int get timestamp;
   $NoteDataCopyWith<NoteData> get copyWith;
 }
 
@@ -468,8 +476,8 @@ class _$NoteList implements NoteList {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    @required TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    @required TResult data(String title, String note),
     @required TResult list(List<NoteObj> notes),
   }) {
     assert($default != null);
@@ -481,8 +489,8 @@ class _$NoteList implements NoteList {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object>(
-    TResult $default(NoteData data, String id), {
-    TResult data(String title, String note, int timestamp),
+    TResult $default(NoteData data, String id, Meta meta), {
+    TResult data(String title, String note),
     TResult list(List<NoteObj> notes),
     @required TResult orElse(),
   }) {
